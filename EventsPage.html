@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Página de Eventos - Funcional</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .container { max-width: 500px; position: relative; }
+        /* Estilo para o campo de input */
+        #j_id1\:operationCalendar\:otdOneOperationCalendarEventList\:filter\:18\:j_id1\:genericCalendarEvent\:dtoEventType_input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        /* Estilo para o painel de autocomplete */
+        .ui-autocomplete-panel {
+            border: 1px solid #ccc;
+            background: #fff;
+            position: absolute;
+            width: 100%;
+            z-index: 1000;
+        }
+        .ui-autocomplete-list-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .ui-autocomplete-list-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Selecione um Evento</h1>
+        
+        <!-- ======================================================= -->
+        <!--  PASSO 1: ADICIONEI O CAMPO DE INPUT CLICÁVEL FALTANTE   -->
+        <!-- ======================================================= -->
+        <input 
+            id="j_id1:operationCalendar:otdOneOperationCalendarEventList:filter:18:j_id1:genericCalendarEvent:dtoEventType_input"
+            type="text" 
+            placeholder="Clique aqui para selecionar o evento" 
+            readonly 
+        />
+        
+        <!-- O painel com o ID exato que você especificou. Começa escondido. -->
+        <span id="j_id1:operationCalendar:otdOneOperationCalendarEventList:filter:18:j_id1:genericCalendarEvent:dtoEventType_panel" class="ui-autocomplete-panel" style="display: none;">
+            <ul class="ui-autocomplete-items ui-autocomplete-list ui-widget-content ui-corner-all ui-helper-reset">
+                <li class="ui-autocomplete-item ui-autocomplete-list-item ui-corner-all" data-item-value="GENERIC_EVENT_ALLOC_REP_BOD_INSTR_IN">'option' Allocation Report to BoD</li>
+                <li class="ui-autocomplete-item ui-autocomplete-list-item ui-corner-all" data-item-value="GENERIC_EVENT_ARTC9_INFO_NOTE_SENT">'option' Artc9.Info Note sent</li>
+                <li class="ui-autocomplete-item ui-autocomplete-list-item ui-corner-all" data-item-value="GENERIC_EVENT_OUTDR_PRO_DDR">'option' Authorisation expiry (Butoir)</li>
+                <li class="ui-autocomplete-item ui-autocomplete-list-item ui-corner-all" data-item-value="GENERIC_EVENT_DA_PCI_670">'option' Confidentiality Agreement</li>
+                <!-- Removido o '== $0' inválido daqui -->
+                <li class="ui-autocomplete-item ui-autocomplete-list-item ui-corner-all" data-item-value="GENERIC_EVENT_D1_APPROVAL_BY_ADVISORY_COMMITTEE">'option' D1 approval by Advisory Committee</li>
+                <li class="ui-autocomplete-item ui-autocomplete-list-item ui-corner-all" data-item-value="GENERIC_EVENT_D2_APPROVAL_BY_ADVISORY_COMMITTEE">'option' D2 approval by Advisory Committee</li>
+            </ul>
+        </span>
+    </div>
+
+    <!-- ======================================================= -->
+    <!--  PASSO 2: ADICIONEI JAVASCRIPT PARA TORNAR A PÁGINA VIVA -->
+    <!-- ======================================================= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputTrigger = document.getElementById('j_id1:operationCalendar:otdOneOperationCalendarEventList:filter:18:j_id1:genericCalendarEvent:dtoEventType_input');
+            const panel = document.getElementById('j_id1:operationCalendar:otdOneOperationCalendarEventList:filter:18:j_id1:genericCalendarEvent:dtoEventType_panel');
+            const listItems = panel.querySelectorAll('.ui-autocomplete-list-item');
+
+            // Quando o input é clicado, mostra o painel
+            inputTrigger.addEventListener('click', () => {
+                panel.style.display = 'block';
+            });
+
+            // Quando um item da lista é clicado...
+            listItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Pega o texto do item e limpa o prefixo "'option' "
+                    const text = this.textContent.replace("'option' ", "").trim();
+                    // Coloca o texto limpo no input
+                    inputTrigger.value = text;
+                    // Esconde o painel novamente
+                    panel.style.display = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

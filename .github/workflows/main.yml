@@ -1,0 +1,48 @@
+# Name of your workflow. This will appear in the 'Actions' tab of your GitHub repository.
+name: Java CI with Maven
+
+# Defines when this workflow should run.
+on:
+  # Runs on any push to the 'main' branch.
+  push:
+    branches: [ "main" ]
+  # Runs on any pull request targeting the 'main' branch.
+  pull_request:
+    branches: [ "main" ]
+
+# Defines the jobs to be executed.
+jobs:
+  # Name of our job. It can be any name.
+  build-and-test:
+    # The type of virtual machine where the job will run. 'ubuntu-latest' is a good default choice.
+    runs-on: ubuntu-latest
+
+    # The sequence of steps that the job will execute.
+    steps:
+      # 1. Checks out your repository's code so the job can access it.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Sets up the Java Development Kit (JDK) environment.
+      # Using version 21, which is a Long-Term Support (LTS) release.
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21' # Set to version 21
+          distribution: 'temurin' # A popular and reliable OpenJDK distribution.
+          cache: maven # Caches Maven dependencies to speed up future builds.
+
+      # 3. Run tests with Maven.
+      # The 'mvn test' command compiles the code and runs all tests (classes ending in Test).
+      # WebDriverManager in your code will handle downloading the correct ChromeDriver.
+      - name: Run tests with Maven
+        run: mvn test
+
+      # 4. (Optional, but recommended) Upload test reports.
+      # If tests fail, you can download and view the reports for debugging.
+      - name: Upload test reports
+        if: always() # This step runs even if the tests fail.
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-test-reports
+          path: target/surefire-reports # Maven saves the test reports in this directory.
